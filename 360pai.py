@@ -60,8 +60,6 @@ class Spider(Spider):
             result = []
             
             cards = soup.select('div.anchor-grid_anchor-card-wrap__NR9Ov')
-            exif = f'#EXTINF:-1 tvg-name="by公众号[医工学习日志]" group-title="360pai",by公众号[医工学习日志]'
-            m3u_content.extend([exif, "by公众号[医工学习日志]"])
             for card in cards:
                 a_tag = card.find('a', class_='anchor-grid_anchor-card__nJf0J')
                 if not a_tag:
@@ -83,7 +81,6 @@ class Spider(Spider):
                 ch_url = f"video://https://360pai.xyz/live/{live_id}"
                 
                 m3u_content.extend([extinf, ch_url])
-                #print(m3u_content)
             
         except requests.exceptions.RequestException as e:
             print(f"网络请求失败: {e}")
@@ -91,8 +88,6 @@ class Spider(Spider):
             print(f"处理过程中发生错误: {e}")
         return '\n'.join(m3u_content)
         
-        
-
     def homeContent(self, filter):
         return {}
 
@@ -120,6 +115,7 @@ class Spider(Spider):
         if params['type'] == "ts":
             return self.get_ts(params)
         return [302, "text/plain", None, {'Location': 'https://sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/mp4/xgplayer-demo-720p.mp4'}]
+    
     def proxyM3u8(self, params):
         pid = params['pid']
         info = pid.split(',')
@@ -138,7 +134,6 @@ class Spider(Spider):
             timestamp += 1
             t += 4
         return [200, "application/vnd.apple.mpegurl", m3u8_text]
-
 
     def get_ts(self, params):
         url = self.b64decode(params['url'])
